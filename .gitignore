@@ -1,0 +1,9 @@
+/build/
+/build-*/
+/cmake-build-*/
+/.playwright-mcp/
+*.user
+*.user.*
+/data/*.txt
+/data/backup/*
+!/data/backup/.gitkeep

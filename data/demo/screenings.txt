@@ -1,0 +1,1 @@
+screening_id|film_id|auditorium_id|start_time|end_time|room_available_until|ticket_price|status

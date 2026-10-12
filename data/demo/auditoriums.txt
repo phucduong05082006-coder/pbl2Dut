@@ -1,0 +1,4 @@
+auditorium_id|name|rows|columns|capacity|status
+R001|Phòng 01|6|8|48|ACTIVE
+R002|Phòng 02|5|8|40|ACTIVE
+R003|Phòng 03|6|8|48|ACTIVE

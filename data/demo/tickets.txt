@@ -1,0 +1,1 @@
+ticket_id|transaction_id|screening_id|seat_id|unit_price|status

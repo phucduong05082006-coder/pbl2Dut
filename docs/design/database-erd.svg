@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1620" height="1330" viewBox="0 0 1620 1330" role="img" aria-labelledby="title desc">
+  <title id="title">Sơ đồ ERD hệ thống quản lý rạp chiếu phim</title>
+  <desc id="desc">Bảy bảng và tám quan hệ một-nhiều. Khóa chính PK xác định bản ghi; khóa ngoại FK tham chiếu bảng khác. Mô hình logic này được lưu bằng TXT, không dùng DBMS.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#dbe4e8"/>
+    </pattern>
+    <style>
+      text { font-family: sans-serif; fill: #193443; }
+      .heading { font-family: Georgia, serif; font-size: 34px; font-weight: bold; }
+      .subtitle { font-size: 17px; fill: #526772; }
+      .card { fill: #fff; stroke: #b6c9d2; stroke-width: 1.5; }
+      .header { fill: #163e53; }
+      .table-name { fill: #fff; font-size: 19px; font-weight: bold; }
+      .field { font-family: monospace; font-size: 15px; }
+      .type { font-family: monospace; font-size: 13px; fill: #5c737d; text-anchor: end; }
+      .key { font-size: 12px; font-weight: bold; fill: #8b5a00; }
+      .foreign { fill: #176779; }
+      .constraint { font-family: monospace; font-size: 12px; fill: #765306; }
+      .link { fill: none; stroke: #19788b; stroke-width: 2.5; stroke-linejoin: round; }
+      .extra { stroke: #71818c; stroke-dasharray: 7 5; }
+      .count { font-size: 14px; font-weight: bold; fill: #176779; paint-order: stroke; stroke: #f3f7f9; stroke-width: 6; stroke-linejoin: round; }
+      .note { font-size: 17px; }
+    </style>
+  </defs>
+
+  <rect width="1620" height="1330" fill="#f3f7f9"/>
+  <rect width="1620" height="1330" fill="url(#grid)"/>
+  <text x="60" y="60" class="heading">Cinema Management · Mô hình dữ liệu</text>
+  <text x="60" y="92" class="subtitle">7 bảng logic · Lưu bằng TXT · Mỗi đường nối liên kết khóa chính với khóa ngoại</text>
+  <text x="60" y="124" class="subtitle">PK = khóa chính    FK = khóa ngoại    UQ = duy nhất    1 = một    0..N = không có hoặc nhiều</text>
+
+  <g id="relationships">
+    <path id="film-screening" class="link" d="M410 228 H480 V258 H540"/>
+    <text x="424" y="216" class="count">1</text><text x="488" y="246" class="count">0..N</text>
+
+    <path id="auditorium-screening" class="link" d="M410 588 H452 V288 H540"/>
+    <text x="421" y="575" class="count">1</text><text x="488" y="276" class="count">0..N</text>
+
+    <path id="auditorium-seat" class="link" d="M60 588 H28 V948 H60"/>
+    <text x="34" y="576" class="count">1</text><text x="30" y="933" class="count">0..N</text>
+
+    <path id="screening-transaction" class="link" d="M980 228 H1010 V530 H505 V678 H540"/>
+    <text x="986" y="215" class="count">1</text><text x="483" y="664" class="count">0..N</text>
+
+    <path id="user-transaction" class="link" d="M1520 228 H1580 V560 H1060 V738 H980"/>
+    <text x="1532" y="215" class="count">1</text><text x="991" y="725" class="count">0..N</text>
+
+    <path id="screening-ticket" class="link extra" d="M980 228 H1040 V798 H1120"/>
+    <text x="1058" y="786" class="count">0..N</text>
+
+    <path id="transaction-ticket" class="link" d="M980 648 H1090 V768 H1120"/>
+    <text x="992" y="636" class="count">1</text><text x="1100" y="755" class="count">0..N</text>
+
+    <path id="seat-ticket" class="link" d="M410 918 H475 V1164 H1080 V828 H1120"/>
+    <text x="425" y="906" class="count">1</text><text x="1100" y="815" class="count">0..N</text>
+  </g>
+
+  <g id="FILM" transform="translate(60 160)">
+    <rect class="card" width="350" height="222" rx="9"/>
+    <path class="header" d="M9 0 H341 Q350 0 350 9 V48 H0 V9 Q0 0 9 0"/>
+    <text x="18" y="31" class="table-name">FILM · Phim</text>
+    <text x="16" y="68" class="key">PK</text><text x="52" y="68" class="field">film_id</text><text x="334" y="68" class="type">VARCHAR(20)</text>
+    <text x="52" y="98" class="field">title</text><text x="334" y="98" class="type">VARCHAR(200)</text>
+    <text x="52" y="128" class="field">duration_minutes</text><text x="334" y="128" class="type">INT</text>
+    <text x="52" y="158" class="field">age_rating</text><text x="334" y="158" class="type">VARCHAR(20)</text>
+    <text x="52" y="188" class="field">status</text><text x="334" y="188" class="type">ENUM</text>
+  </g>
+
+  <g id="SCREENING" transform="translate(540 160)">
+    <rect class="card" width="440" height="312" rx="9"/>
+    <path class="header" d="M9 0 H431 Q440 0 440 9 V48 H0 V9 Q0 0 9 0"/>
+    <text x="18" y="31" class="table-name">SCREENING · Suất chiếu</text>
+    <text x="16" y="68" class="key">PK</text><text x="52" y="68" class="field">screening_id</text><text x="424" y="68" class="type">VARCHAR(20)</text>
+    <text x="16" y="98" class="key foreign">FK</text><text x="52" y="98" class="field">film_id</text><text x="424" y="98" class="type">VARCHAR(20)</text>
+    <text x="16" y="128" class="key foreign">FK</text><text x="52" y="128" class="field">auditorium_id</text><text x="424" y="128" class="type">VARCHAR(20)</text>
+    <text x="52" y="158" class="field">start_time</text><text x="424" y="158" class="type">DATETIME</text>
+    <text x="52" y="188" class="field">end_time</text><text x="424" y="188" class="type">DATETIME</text>
+    <text x="52" y="218" class="field">room_available_until</text><text x="424" y="218" class="type">DATETIME</text>
+    <text x="52" y="248" class="field">ticket_price</text><text x="424" y="248" class="type">MONEY (VND)</text>
+    <text x="52" y="278" class="field">status</text><text x="424" y="278" class="type">ENUM</text>
+  </g>
+
+  <g id="USER" transform="translate(1120 160)">
+    <rect class="card" width="400" height="282" rx="9"/>
+    <path class="header" d="M9 0 H391 Q400 0 400 9 V48 H0 V9 Q0 0 9 0"/>
+    <text x="18" y="31" class="table-name">USER · Tài khoản</text>
+    <text x="16" y="68" class="key">PK</text><text x="52" y="68" class="field">user_id</text><text x="384" y="68" class="type">VARCHAR(20)</text>
+    <text x="16" y="98" class="key">UQ</text><text x="52" y="98" class="field">username</text><text x="384" y="98" class="type">VARCHAR(50)</text>
+    <text x="52" y="128" class="field">password_value</text><text x="384" y="128" class="type">VARCHAR(255)</text>
+    <text x="52" y="158" class="field">display_name</text><text x="384" y="158" class="type">VARCHAR(100)</text>
+    <text x="52" y="188" class="field">role</text><text x="384" y="188" class="type">ENUM</text>
+    <text x="52" y="218" class="field">can_sell_ticket</text><text x="384" y="218" class="type">BOOLEAN</text>
+    <text x="52" y="248" class="field">status</text><text x="384" y="248" class="type">ENUM</text>
+  </g>
+
+  <g id="AUDITORIUM" transform="translate(60 520)">
+    <rect class="card" width="350" height="192" rx="9"/>
+    <path class="header" d="M9 0 H341 Q350 0 350 9 V48 H0 V9 Q0 0 9 0"/>
+    <text x="18" y="31" class="table-name">AUDITORIUM · Phòng chiếu</text>
+    <text x="16" y="68" class="key">PK</text><text x="52" y="68" class="field">auditorium_id</text><text x="334" y="68" class="type">VARCHAR(20)</text>
+    <text x="52" y="98" class="field">name</text><text x="334" y="98" class="type">VARCHAR(100)</text>
+    <text x="52" y="128" class="field">capacity</text><text x="334" y="128" class="type">INT</text>
+    <text x="52" y="158" class="field">status</text><text x="334" y="158" class="type">ENUM</text>
+  </g>
+
+  <g id="SALE_TRANSACTION" transform="translate(540 580)">
+    <rect class="card" width="440" height="282" rx="9"/>
+    <path class="header" d="M9 0 H431 Q440 0 440 9 V48 H0 V9 Q0 0 9 0"/>
+    <text x="18" y="31" class="table-name">SALE_TRANSACTION · Giao dịch</text>
+    <text x="16" y="68" class="key">PK</text><text x="52" y="68" class="field">transaction_id</text><text x="424" y="68" class="type">VARCHAR(20)</text>
+    <text x="16" y="98" class="key foreign">FK</text><text x="52" y="98" class="field">screening_id</text><text x="424" y="98" class="type">VARCHAR(20)</text>
+    <text x="52" y="128" class="field">created_at</text><text x="424" y="128" class="type">DATETIME</text>
+    <text x="16" y="158" class="key foreign">FK</text><text x="52" y="158" class="field">created_by</text><text x="424" y="158" class="type">VARCHAR(20)</text>
+    <text x="52" y="188" class="field">total_amount</text><text x="424" y="188" class="type">MONEY (VND)</text>
+    <text x="52" y="218" class="field">payment_status</text><text x="424" y="218" class="type">ENUM</text>
+    <text x="52" y="248" class="field">status</text><text x="424" y="248" class="type">ENUM</text>
+  </g>
+
+  <g id="SEAT" transform="translate(60 850)">
+    <rect class="card" width="350" height="302" rx="9"/>
+    <path class="header" d="M9 0 H341 Q350 0 350 9 V48 H0 V9 Q0 0 9 0"/>
+    <text x="18" y="31" class="table-name">SEAT · Ghế</text>
+    <text x="16" y="68" class="key">PK</text><text x="52" y="68" class="field">seat_id</text><text x="334" y="68" class="type">VARCHAR(20)</text>
+    <text x="16" y="98" class="key foreign">FK</text><text x="52" y="98" class="field">auditorium_id</text><text x="334" y="98" class="type">VARCHAR(20)</text>
+    <text x="52" y="128" class="field">seat_code</text><text x="334" y="128" class="type">VARCHAR(20)</text>
+    <text x="52" y="158" class="field">row_label</text><text x="334" y="158" class="type">VARCHAR(10)</text>
+    <text x="52" y="188" class="field">seat_number</text><text x="334" y="188" class="type">INT</text>
+    <text x="52" y="218" class="field">seat_type</text><text x="334" y="218" class="type">ENUM</text>
+    <text x="52" y="248" class="field">status</text><text x="334" y="248" class="type">ENUM</text>
+    <text x="16" y="282" class="constraint">UQ (auditorium_id, seat_code)</text>
+  </g>
+
+  <g id="TICKET" transform="translate(1120 670)">
+    <rect class="card" width="400" height="272" rx="9"/>
+    <path class="header" d="M9 0 H391 Q400 0 400 9 V48 H0 V9 Q0 0 9 0"/>
+    <text x="18" y="31" class="table-name">TICKET · Vé</text>
+    <text x="16" y="68" class="key">PK</text><text x="52" y="68" class="field">ticket_id</text><text x="384" y="68" class="type">VARCHAR(20)</text>
+    <text x="16" y="98" class="key foreign">FK</text><text x="52" y="98" class="field">transaction_id</text><text x="384" y="98" class="type">VARCHAR(20)</text>
+    <text x="16" y="128" class="key foreign">FK</text><text x="52" y="128" class="field">screening_id</text><text x="384" y="128" class="type">VARCHAR(20)</text>
+    <text x="16" y="158" class="key foreign">FK</text><text x="52" y="158" class="field">seat_id</text><text x="384" y="158" class="type">VARCHAR(20)</text>
+    <text x="52" y="188" class="field">unit_price</text><text x="384" y="188" class="type">MONEY (VND)</text>
+    <text x="52" y="218" class="field">status</text><text x="384" y="218" class="type">ENUM</text>
+    <text x="16" y="252" class="constraint">UQ (screening_id, seat_id)</text>
+  </g>
+
+  <text x="550" y="970" class="note">Đường nối chạm nhau không tạo thêm quan hệ.</text>
+  <text x="550" y="1000" class="note">Nét đứt: suất chiếu được tham chiếu trực tiếp trên vé.</text>
+  <text x="550" y="1030" class="note">Giao dịch hoàn tất phải có ít nhất 1 vé (1..N).</text>
+  <text x="550" y="1060" class="note">Giao dịch chưa hoàn tất có thể chưa có vé (0..N).</text>
+
+  <rect x="60" y="1200" width="1460" height="90" rx="9" fill="#e6eff3"/>
+  <text x="80" y="1230" class="note">Ví dụ: 1 phim có nhiều suất chiếu; 1 giao dịch có nhiều vé; mỗi vé chọn đúng 1 ghế của 1 suất chiếu.</text>
+  <text x="80" y="1260" class="note">UNIQUE(screening_id, seat_id) ngăn bán trùng ghế. Doanh thu được tính từ giao dịch hợp lệ, không có bảng riêng.</text>
+</svg>

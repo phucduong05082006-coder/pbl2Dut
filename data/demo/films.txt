@@ -1,0 +1,4 @@
+film_id|title|duration_minutes|age_rating|status
+F001|Chuyến tàu mùa thu|98|P|ACTIVE
+F002|Phía sau ánh đèn|112|T13|ACTIVE
+F003|Một ngày thật khác|105|T16|ACTIVE
