@@ -1,1 +1,3 @@
-ticket_id|transaction_id|screening_id|seat_id|unit_price|status
+ticket_id|screening_id|seat_id|sold_at|unit_price
+1|1|1|2026-10-19 10:00|80000
+2|2|13|2026-10-19 10:05|70000

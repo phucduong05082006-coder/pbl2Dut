@@ -1,3 +1,0 @@
-user_id|username|password_value|display_name|role|can_sell_ticket|status
-U001|manager|$y$j9T$87qNuB.Tpd6NG95qeGO2g.$W7cWJi0a7zzFo/dAZmY2NnaI.nhuCcGHT/VTQBVgeS5|Nguyễn Minh Anh|MANAGER|1|ACTIVE
-U002|seller01|$y$j9T$87qNuB.Tpd6NG95qeGO2g.$W7cWJi0a7zzFo/dAZmY2NnaI.nhuCcGHT/VTQBVgeS5|Trần Hoài An|SELLER|1|ACTIVE

@@ -1,1 +1,0 @@
-transaction_id|screening_id|created_at|created_by|total_amount|payment_status|status

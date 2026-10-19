@@ -1,38 +1,69 @@
-// ============================================================================
-//  Matrix2D.h - Ma tran ky tu 2 chieu cap phat dong (char**)
-//  Dung cho so do ghe: 'O' = ghe trong, 'X' = ghe da dat
-//  Cai dat: Matrix2D.cpp (khong phai template nen bien dich rieng duoc)
-// ============================================================================
-#ifndef MATRIX2D_H
-#define MATRIX2D_H
+#pragma once
 
-class Matrix2D
-{
-private:
-    char** data;
-    int rows;
-    int cols;
+#include <cstddef>
+#include <limits>
+#include <stdexcept>
 
-    void allocate(int r, int c, char fillValue);   // new char*[r], moi hang new char[c]
-    void release();                                // delete[] tung hang, roi delete[] data
-
+template <typename T>
+class Matrix2D {
 public:
-    Matrix2D(int r = 0, int c = 0, char fillValue = ' ');
-    Matrix2D(const Matrix2D& other);               // Rule of Three
-    Matrix2D& operator=(const Matrix2D& other);
-    ~Matrix2D();
+    Matrix2D(std::size_t rows, std::size_t columns)
+        : rows_(rows), columns_(columns) {
+        if (rows == 0 || columns == 0) {
+            throw std::invalid_argument("Matrix dimensions must be positive");
+        }
+        const std::size_t maximum = std::numeric_limits<std::size_t>::max();
+        if (rows > maximum / columns || rows * columns > maximum / sizeof(T)) {
+            throw std::length_error("Matrix allocation size overflow");
+        }
+        values_ = new T[rows * columns]{};
+    }
 
-    int getRows() const;
-    int getCols() const;
+    Matrix2D(const Matrix2D&) = delete;
+    Matrix2D& operator=(const Matrix2D&) = delete;
+    Matrix2D(Matrix2D&&) = delete;
+    Matrix2D& operator=(Matrix2D&&) = delete;
 
-    bool isValidPosition(int r, int c) const;
-    char get(int r, int c) const;                  // '\0' neu vi tri sai
-    bool set(int r, int c, char value);            // false neu vi tri sai
-    void fill(char value);
-    int count(char value) const;                   // dem so o co gia tri = value
+    ~Matrix2D() {
+        delete[] values_;
+    }
 
-    // In ma tran voi tieu de cot 1..cols va nhan hang A, B, C...
-    void display() const;
+    [[nodiscard]] std::size_t rows() const noexcept {
+        return rows_;
+    }
+
+    [[nodiscard]] std::size_t columns() const noexcept {
+        return columns_;
+    }
+
+    [[nodiscard]] std::size_t size() const noexcept {
+        return rows_ * columns_;
+    }
+
+    T& at(std::size_t row, std::size_t column) {
+        checkBounds(row, column);
+        return values_[row * columns_ + column];
+    }
+
+    const T& at(std::size_t row, std::size_t column) const {
+        checkBounds(row, column);
+        return values_[row * columns_ + column];
+    }
+
+    void fill(const T& value) {
+        for (std::size_t index = 0; index < size(); ++index) {
+            values_[index] = value;
+        }
+    }
+
+private:
+    void checkBounds(std::size_t row, std::size_t column) const {
+        if (row >= rows_ || column >= columns_) {
+            throw std::out_of_range("Matrix index out of range");
+        }
+    }
+
+    std::size_t rows_;
+    std::size_t columns_;
+    T* values_ = nullptr;
 };
-
-#endif

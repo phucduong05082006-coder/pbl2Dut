@@ -1,9 +1,7 @@
-/build/
-/build-*/
+/build*/
 /cmake-build-*/
+/.cache/
 /.playwright-mcp/
+/passForInstall.env
+/codex-session-*.md
 *.user
-*.user.*
-/data/*.txt
-/data/backup/*
-!/data/backup/.gitkeep

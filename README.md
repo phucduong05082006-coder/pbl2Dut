@@ -1,49 +1,164 @@
-# FRAME - Quản lý rạp chiếu phim
+# PBL2 - Cinema Management System
 
-Ứng dụng desktop C++17 / Qt Widgets, lưu dữ liệu bằng file TXT qua
-ProjectDataEngine. Mã nguồn chia theo trách nhiệm; cấu trúc dữ liệu tự xây dựng
-được giữ trong `src/DataStructures/`.
+Đồ án PBL2 quản lý rạp chiếu phim chạy offline trên một máy, viết bằng C++17 và
+Qt 6 Widgets. Dữ liệu được lưu trong năm file TXT, không dùng DBMS hoặc kết nối
+mạng. Phiên bản hiện tại đã hoàn thiện giao diện, nghiệp vụ và kiểm thử.
 
-## Cấu trúc dự án
+## Chức năng
 
-| Thư mục | Nội dung |
-|---|---|
-| `src/` | Mã nguồn C++, chia theo trách nhiệm, không lồng package Java |
-| `src/ui/` | Giao diện Qt: cửa sổ, hộp thoại và trang chức năng |
-| `src/service/` | Mỗi nghiệp vụ có cặp `.h/.cpp` riêng; request/result đặt cạnh service |
-| `tests/` | Kiểm thử core, lưu trữ, nghiệp vụ và Qt |
-| `src/DataStructures/` | Các cấu trúc dữ liệu tự xây dựng |
-| `data/` | Dữ liệu mẫu và thư mục dự phòng; không xóa khi dọn dự án |
-| `resources/` | Vị trí dành cho tài nguyên ứng dụng |
-| `docs/requirements/` | BRD, SRS và use case |
-| `docs/design/` | Kiến trúc, thiết kế dữ liệu và sơ đồ ERD |
-| `docs/design/wireframes/` | Wireframe HTML, ảnh và kiểm tra wireframe |
-| `docs/reviews/` | Kết quả rà soát yêu cầu |
-| `docs/product/` | Giải thích sản phẩm hiện tại, sơ đồ Mermaid và hướng dẫn vấn đáp |
-| `build/` | Kết quả build cục bộ, không phải mã nguồn |
+- Quản lý phim, phòng chiếu và sơ đồ ghế.
+- Tạo, sửa, xóa và lọc suất chiếu; kiểm tra trùng lịch và thời gian nghỉ.
+- Chọn ghế, xác nhận tiền mặt và bán vé.
+- Xem toàn bộ vé bán theo ngày, tìm nhanh theo mã và tính doanh thu ngày.
+- Kiểm tra toàn vẹn dữ liệu khi mở; lưu đồng bộ năm file và giữ bản sao phục hồi.
 
-## Bắt đầu
+## Cài đặt công cụ
 
-- [Tài liệu sản phẩm hiện tại](docs/product/README.md)
-- [Lộ trình học và ôn vấn đáp từ đầu tới cuối](docs/product/11-learning-roadmap.md)
-- [Build, cấp Admin và chạy demo](docs/product/02-build-and-demo.md)
-- [BRD](docs/requirements/brd.md), [SRS](docs/requirements/srs.md) và [Use case](docs/requirements/use-cases.md)
-- [Kiến trúc](docs/design/ARCHITECTURE.md) và [Thiết kế dữ liệu](docs/design/data-design.md)
-- [Sơ đồ ERD](docs/design/database-erd.svg) và [Wireframe](docs/design/wireframes/wireframe.html)
-- [Rà soát yêu cầu](docs/reviews/requirements-audit.md)
+### Ubuntu/Debian
 
-Build và kiểm thử từ thư mục gốc, sau khi cài CMake, Qt Widgets và libcrypt:
+Máy cần Git, compiler C++17, CMake và Qt 6 Widgets:
+
+```bash
+sudo apt update
+sudo apt install -y git build-essential cmake qt6-base-dev
+```
+
+### Windows 10/11
+
+Cài [MSYS2](https://www.msys2.org/), mở terminal **MSYS2 UCRT64** rồi chạy:
+
+```bash
+pacman -Syu
+pacman -S --needed git mingw-w64-ucrt-x86_64-gcc \
+    mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-ninja \
+    mingw-w64-ucrt-x86_64-qt6-base
+```
+
+Các lệnh còn lại phải chạy trong terminal UCRT64, không chạy bằng Command Prompt.
+
+## Clone dự án
+
+Clone và vào thư mục dự án:
+
+```bash
+git clone https://github.com/qchien643/pbl2Dut.git
+cd pbl2Dut
+```
+
+## Build và kiểm thử
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j2
+cmake --build build --parallel
 ctest --test-dir build --output-on-failure
-./build/cinema_app --help
 ```
 
-Nếu CMake không tìm thấy Qt, chỉ core được build. Xem hướng dẫn build để
-cấu hình Qt trên máy hiện tại. Kiểm tra wireframe riêng bằng
-`node docs/design/wireframes/wireframe.check.cjs`.
+Trên MSYS2 UCRT64, thêm Ninja ở bước cấu hình:
 
-Dữ liệu vận hành mặc định nằm ngoài repository, do Qt xác định; `data/demo/`
-chỉ là seed. Không chạy ứng dụng trực tiếp vào seed hoặc xóa dữ liệu để sửa lỗi.
+```bash
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+```
+
+Kết quả đúng là toàn bộ 8 test đều `Passed`. CMake cũng tạo
+`build/compile_commands.json` để VS Code nhận các header Qt sau lần build đầu tiên.
+
+Nếu chỉ cần kiểm thử phần lõi mà không có Qt:
+
+```bash
+cmake -S . -B build -DBUILD_GUI=OFF -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+```
+
+## Chạy chương trình
+
+Không truyền tham số, chương trình mở hộp thoại chọn thư mục dữ liệu:
+
+```bash
+./build/cinema
+```
+
+Để thử với dữ liệu mẫu mà không sửa bản gốc:
+
+```bash
+cp -r data/demo /tmp/pbl2-demo
+./build/cinema /tmp/pbl2-demo
+```
+
+Thư mục dữ liệu phải tồn tại và chứa đủ:
+
+```text
+films.txt
+auditoriums.txt
+seats.txt
+screenings.txt
+tickets.txt
+```
+
+Có thể chọn thư mục rỗng để bắt đầu dữ liệu mới sau khi xác nhận. Khi thoát bình
+thường, chương trình lưu toàn bộ dữ liệu; các thư mục `.cms-backup-N` là bản sao
+phục hồi và không nên xóa khi chưa kiểm tra dữ liệu hiện tại.
+
+## Cấu trúc dự án
+
+```text
+src/
+├── DataStructures/   LinkedList, HashTable, Matrix2D tự cài đặt
+├── entities/         Mỗi entity có một header riêng
+├── repositories/     Mỗi repository có một header riêng
+├── persistence/      Đọc và ghi định dạng TXT
+├── services/         Mỗi service có header và implementation riêng
+├── ui/               Giao diện Qt Widgets
+├── ApplicationData.* Điều phối nạp, kiểm tra và lưu dữ liệu
+└── main.cpp           Điểm khởi động chương trình
+tests/                 Tám bộ kiểm thử tự chạy bằng CTest
+data/demo/             Bộ dữ liệu mẫu
+docs/design/           Thiết kế dữ liệu, lớp, TXT và giao diện
+docs/requirements/     Đặc tả yêu cầu hiện hành
+```
+
+Quy tắc nghiệp vụ nằm trong service, không nằm trong widget. Repository dùng cấu
+trúc dữ liệu tự cài đặt làm nơi lưu chính; Qt chỉ phục vụ giao diện.
+
+## Kiến trúc
+
+```text
+MainWindow (Qt UI)
+        │
+        ▼
+CatalogService / ScreeningService / TicketService
+        │
+        ▼
+Repository<T> ── LinkedList<T> + HashTable<ID, T*>
+        ▲
+        │
+ApplicationData ── TxtPersistence ── 5 file TXT
+```
+
+- Entity đóng gói dữ liệu và kiểm tra tính hợp lệ nội tại.
+- Service xử lý các quy tắc cần phối hợp nhiều entity.
+- Repository quản lý bản ghi và chỉ mục trên RAM.
+- `ApplicationData` điều phối nạp, kiểm tra, lưu và phục hồi dữ liệu.
+- `Matrix2D<T>` được dùng để dựng sơ đồ ghế của phòng hoặc suất chiếu.
+
+## Tài liệu
+
+- [SRS 1.0](docs/requirements/srs.md)
+- [Thiết kế dữ liệu và ERD](docs/design/data-design.md)
+- [Thiết kế lớp và tổ chức RAM](docs/design/class-design.md)
+- [Định dạng TXT và phục hồi](docs/design/txt-format.md)
+- [Đối chiếu triển khai và kiểm thử](docs/design/verification.md)
+- [Wireframe giao diện](docs/design/ui-wireframe.html)
+
+## Xử lý lỗi thường gặp
+
+`Could not find Qt6`:
+
+```bash
+sudo apt install qt6-base-dev
+rm -rf build
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+```
+
+VS Code gạch đỏ các dòng `#include <Q...>`: build dự án một lần, sau đó chạy
+`C/C++: Reset IntelliSense Database` hoặc `Developer: Reload Window`.
